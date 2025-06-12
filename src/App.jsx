@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import html2canvas from "html2canvas";
+import { motion, AnimatePresence } from "framer-motion"; // bringing in motion & AnimatePresence
 
 function App() {
+  // snapshot button - captures a screenshot of the main content div
   function handleSnapshot() {
     const tierlist = document.querySelector(".maincontent");
     if (!tierlist) return;
@@ -14,6 +16,7 @@ function App() {
     });
   }
 
+  // default rows
   const initialRows = [
     { item: "S", color: "#FF0055" },
     { item: "A", color: "#00B8FF" },
@@ -22,13 +25,12 @@ function App() {
     { item: "D", color: "#FF6B00" },
   ];
 
+  const [editingTier, setEditingTier] = useState(null);
+  const [editedTierName, setEditedTierName] = useState("");
+
   const [row, setRow] = useState(initialRows);
   const [tiers, setTiers] = useState({
-    S: [],
-    A: [],
-    B: [],
-    C: [],
-    D: [],
+    S: [], A: [], B: [], C: [], D: [],
   });
 
   const [unranked, setUnranked] = useState(
@@ -41,6 +43,34 @@ function App() {
   const settingsRef = useRef(null);
   const [draggedChar, setDraggedChar] = useState(null);
 
+  // inline tier name editing logic
+  function startEditing(index, currentName) {
+    setEditingTier(index);
+    setEditedTierName(currentName);
+  }
+
+  function finishEditing(index) {
+    if (!editedTierName.trim()) {
+      setEditingTier(null);
+      return;
+    }
+
+    const newLabel = editedTierName.trim().toUpperCase();
+    const oldLabel = row[index].item;
+
+    const updatedRow = [...row];
+    updatedRow[index].item = newLabel;
+
+    const updatedTiers = { ...tiers };
+    updatedTiers[newLabel] = updatedTiers[oldLabel] || [];
+    delete updatedTiers[oldLabel];
+
+    setRow(updatedRow);
+    setTiers(updatedTiers);
+    setEditingTier(null);
+  }
+
+  // auto-close settings box when clicking outside of it
   useEffect(() => {
     function handleClickOutside(e) {
       if (
@@ -135,9 +165,8 @@ function App() {
         <button className="add-button" onClick={() => Setsettings(true)}>
           + Add Tier
         </button>
-
         <button className="snapshot-button" onClick={handleSnapshot}>
-        <i className="fa-solid fa-camera"></i>
+          <i className="fa-solid fa-camera"></i>
         </button>
       </div>
 
@@ -148,83 +177,104 @@ function App() {
           const tierList = tiers[tierLabel] || [];
 
           return (
-            <div
+            <motion.div
               key={i}
               className="item"
               onDrop={(e) => handleDrop(e, tierLabel)}
               onDragOver={allowDrop}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
             >
               <div className="name" style={{ backgroundColor: tierColor }}>
-                {tierLabel}
+                {editingTier === i ? (
+                  <input
+                    type="text"
+                    value={editedTierName}
+                    onChange={(e) => setEditedTierName(e.target.value)}
+                    onBlur={() => finishEditing(i)}
+                    onKeyDown={(e) => e.key === "Enter" && finishEditing(i)}
+                    autoFocus
+                  />
+                ) : (
+                  <span onClick={() => startEditing(i, tierLabel)}>{tierLabel}</span>
+                )}
               </div>
+
               <div className="middle">
                 {tierList.map((charId, idx) => (
-                  <div
+                  <motion.div
                     key={idx}
                     className={`char ${charId}`}
                     draggable
                     onDragStart={(e) => handleDragStart(e, charId)}
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={(e) => handleDropInTier(e, tierLabel, charId)}
-                  ></div>
+                    whileDrag={{ scale: 1.2, zIndex: 999 }}
+                  />
                 ))}
               </div>
+
               <div className="right">
                 <button onClick={() => deleteRow(i)}>✕</button>
               </div>
-            </div>
+            </motion.div>
           );
         })}
       </div>
 
       <div className="characters">
         {unranked.map((charId, i) => (
-          <div
+          <motion.div
             key={i}
             className={`char ${charId}`}
             draggable
             onDragStart={(e) => handleDragStart(e, charId)}
-          ></div>
+            whileDrag={{ scale: 1.2, zIndex: 99 }}
+          />
         ))}
       </div>
 
-      {settings && (
-        <div className="showsettings" ref={settingsRef}>
-          <div className="colour">
-            {[
-              "#FF0055",
-              "#FF6B00",
-              "#FFD500",
-              "#00E676",
-              "#00B8FF",
-              "#A94BFF",
-              "#FF61C3",
-              "#00F0FF",
-              "#FFF685",
-              "#444AFF",
-            ].map((clr, i) => (
-              <div
-                key={i}
-                className="colours"
-                style={{ backgroundColor: clr }}
-                onClick={() => setColor(clr)}
-              ></div>
-            ))}
-          </div>
-          <div className="names">
-            <input
-              type="text"
-              value={newrow}
-              onChange={(e) => Setnewrow(e.target.value)}
-              placeholder="Tier name"
-            />
-          </div>
-          <div className="end">
-            <button onClick={add}>Add Row</button>
-          </div>
-        </div>
-      )}
+      {/* Tier Settings Modal with AnimatePresence for animations */}
+      <AnimatePresence>
+        {settings && (
+          <motion.div
+            className="showsettings"
+            ref={settingsRef}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="colour">
+              {[
+                "#FF0055", "#FF6B00", "#FFD500", "#00E676", "#00B8FF",
+                "#A94BFF", "#FF61C3", "#00F0FF", "#FFF685", "#444AFF",
+              ].map((clr, i) => (
+                <div
+                  key={i}
+                  className="colours"
+                  style={{ backgroundColor: clr }}
+                  onClick={() => setColor(clr)}
+                />
+              ))}
+            </div>
+            <div className="names">
+              <input
+                type="text"
+                value={newrow}
+                onChange={(e) => Setnewrow(e.target.value)}
+                placeholder="Tier name"
+              />
+            </div>
+            <div className="end">
+              <button onClick={add}>Add Row</button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
+      {/* Back to top + character select */}
       <button
         className="to-top"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -232,9 +282,9 @@ function App() {
         ↑
       </button>
 
-      <a href="https://fightercenter.net/"><button className="changechar">Character Select</button></a>
-
-      
+      <a href="https://fightercenter.net/">
+        <button className="changechar">Character Select</button>
+      </a>
     </div>
   );
 }
