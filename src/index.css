@@ -203,9 +203,9 @@ body {
 /* MODAL (Add Tier) */
 .showsettings {
   position: fixed;
-  top: 15%;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%); /* perfect center */
   background-color: white;
   width: 280px;
   border-radius: 10px;
@@ -217,11 +217,13 @@ body {
   align-items: center;
   gap: 20px;
   box-shadow: 0 0 16px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .showsettings:hover {
-  transform: scale(1.01);
+  transform: translate(-50%, -50%) scale(1.01); /* stay centered while scaling */
 }
+
 
 /* COLOUR CIRCLE OPTIONS */
 .colour {
@@ -331,4 +333,17 @@ body {
 
 .changechar:hover {
   transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  
+
+  .changechar {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    position: relative;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }
