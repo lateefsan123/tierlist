@@ -1,6 +1,19 @@
 import { useState, useRef, useEffect } from "react";
+import html2canvas from "html2canvas";
 
 function App() {
+  function handleSnapshot() {
+    const tierlist = document.querySelector(".maincontent");
+    if (!tierlist) return;
+
+    html2canvas(tierlist).then((canvas) => {
+      const link = document.createElement("a");
+      link.download = "tierlist.png";
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+  }
+
   const initialRows = [
     { item: "S", color: "#FF0055" },
     { item: "A", color: "#00B8FF" },
@@ -30,7 +43,11 @@ function App() {
 
   useEffect(() => {
     function handleClickOutside(e) {
-      if (settings && settingsRef.current && !settingsRef.current.contains(e.target)) {
+      if (
+        settings &&
+        settingsRef.current &&
+        !settingsRef.current.contains(e.target)
+      ) {
         Setsettings(false);
       }
     }
@@ -115,7 +132,13 @@ function App() {
     <div className="body">
       <div className="header">
         <h3 className="title">Tier List Maker</h3>
-        <button className="add-button" onClick={() => Setsettings(true)}>+ Add Tier</button>
+        <button className="add-button" onClick={() => Setsettings(true)}>
+          + Add Tier
+        </button>
+
+        <button className="snapshot-button" onClick={handleSnapshot}>
+        <i className="fa-solid fa-camera"></i>
+        </button>
       </div>
 
       <div className="maincontent">
@@ -168,8 +191,17 @@ function App() {
       {settings && (
         <div className="showsettings" ref={settingsRef}>
           <div className="colour">
-            {["#FF0055", "#FF6B00", "#FFD500", "#00E676", "#00B8FF",
-              "#A94BFF", "#FF61C3", "#00F0FF", "#FFF685", "#444AFF"
+            {[
+              "#FF0055",
+              "#FF6B00",
+              "#FFD500",
+              "#00E676",
+              "#00B8FF",
+              "#A94BFF",
+              "#FF61C3",
+              "#00F0FF",
+              "#FFF685",
+              "#444AFF",
             ].map((clr, i) => (
               <div
                 key={i}
@@ -193,8 +225,16 @@ function App() {
         </div>
       )}
 
-      <button className="to-top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>↑</button>
+      <button
+        className="to-top"
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      >
+        ↑
+      </button>
 
+      <a href="https://fightercenter.net/"><button className="changechar">Character Select</button></a>
+
+      
     </div>
   );
 }

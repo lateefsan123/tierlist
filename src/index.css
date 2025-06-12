@@ -47,6 +47,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 10px;
   color: white;
   font-size: 1.5rem;
   margin: 20px;
@@ -268,9 +269,66 @@ body {
   cursor: pointer;
   z-index: 999;
   box-shadow: 0 0 8px rgba(0,0,0,0.4);
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .to-top:hover {
   background-color: #007fb0;
+  transform: scale(1.1);
+}
+
+.snapshot-button {
+  background-color: #22c55e;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease;
+}
+
+.snapshot-button:hover {
+  transform: scale(1.05);
+  background-color: #16a34a;
+}
+
+.changechar {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: 3px solid plum;
+  color: white;
+  font-size: 1rem;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  z-index: 999;
+  box-shadow: 0 0 8px rgba(0,0,0,0.4);
+  width: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: change 3s ease-in-out infinite;
+
+}
+
+@keyframes change {
+    50% {
+        border: 3px solid rgb(43, 199, 226)
+    }
+}
+
+.changechar:hover {
   transform: scale(1.1);
 }
