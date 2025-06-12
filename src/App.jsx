@@ -279,7 +279,7 @@ function App() {
         className="to-top"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       >
-        ↑
+        <i className="fa-duotone fa-solid fa-arrow-up"></i>
       </button>
 
       <a href="https://fightercenter.net/">
