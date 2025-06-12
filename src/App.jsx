@@ -192,6 +192,9 @@ function App() {
           </div>
         </div>
       )}
+
+      <button className="to-top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>↑</button>
+
     </div>
   );
 }
