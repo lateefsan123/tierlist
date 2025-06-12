@@ -1,0 +1,210 @@
+body {
+  background-image: url("images2/SF6_Background.jpeg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin: 0;
+  padding: 0;
+}
+
+.body, html {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-family: "Poppins", sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 1.5rem;
+  margin: 20px;
+}
+
+.maincontent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 40px auto;
+}
+
+.item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  margin: 8px 0;
+  background: rgba(20, 20, 20, 0.8);
+  backdrop-filter: blur(5px);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+  border: 2px solid white;
+}
+
+.middle {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  background-color: lightgrey;
+  padding: 10px;
+  min-height: 80px;
+  flex: 1;
+  border: 2px solid white;
+}
+
+.name,
+.right {
+  width: 80px;
+  min-width: 80px;
+  height: 80px;
+  background-color: black;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.name {
+  background-color: #111;
+  font-size: 1rem;
+  font-weight: bold;
+  border-right: 2px solid #333;
+}
+
+.right button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.characters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: 1100px;
+  margin: 20px auto;
+  padding: 10px;
+}
+
+.char {
+  width: 80px;
+  height: 80px;
+  border: 2px solid black;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.character1 { background-image: url("images2/aki.jpg"); }
+.character2 { background-image: url("images2/akuma.jpg"); }
+.character3 { background-image: url("images2/blanka.jpg"); }
+.character4 { background-image: url("images2/cammy.jpg"); }
+.character5 { background-image: url("images2/chunli.jpg"); }
+.character6 { background-image: url("images2/deejay.jpg"); }
+.character7 { background-image: url("images2/dhalsim.jpg"); }
+.character8 { background-image: url("images2/ehonda.jpg"); }
+.character9 { background-image: url("images2/ed.jpg"); }
+.character10 { background-image: url("images2/Elena.jpg"); }
+.character11 { background-image: url("images2/guile.jpg"); }
+.character12 { background-image: url("images2/jamie.jpg"); }
+.character13 { background-image: url("images2/JP.jpg"); }
+.character14 { background-image: url("images2/juri.jpg"); }
+.character15 { background-image: url("images2/ken.jpg"); }
+.character16 { background-image: url("images2/kimberly.jpg"); }
+.character17 { background-image: url("images2/lily.jpg"); }
+.character18 { background-image: url("images2/luke.jpg"); }
+.character19 { background-image: url("images2/mbison.jpg"); }
+.character20 { background-image: url("images2/mai.jpg"); }
+.character21 { background-image: url("images2/manon.jpg"); }
+.character22 { background-image: url("images2/marisa.jpg"); }
+.character23 { background-image: url("images2/rashid.jpg"); }
+.character24 { background-image: url("images2/Ryu.jpg"); }
+.character25 { background-image: url("images2/terry.jpg"); }
+.character26 { background-image: url("images2/zangief.jpg"); }
+
+.add-button {
+  background-color: #00b8ff;
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 15px;
+  transition: all 0.2s ease;
+}
+
+.add-button:hover {
+  background-color: #0094cc;
+  transform: scale(1.05);
+}
+
+/* Modal (Add Tier) */
+.showsettings {
+  position: fixed;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  width: 280px;
+  border-radius: 10px;
+  padding: 20px;
+  border: 4px solid black;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.colour {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.colours {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.colours:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.names input {
+  width: 90%;
+  padding: 5px;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.end button {
+  padding: 6px 12px;
+  border-radius: 8px;
+  background-color: #00b8ff;
+  color: white;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.end button:hover {
+  background-color: #0094cc;
+}
