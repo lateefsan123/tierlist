@@ -22,7 +22,7 @@ function App() {
   const settingsRef = useRef(null);
   const [draggedChar, setDraggedChar] = useState(null);
 
-  // Share tier list via Twitter
+  // Share tier list via Twittee couldnt get it to work
   async function handleTwitter() {
     const tweetText = encodeURIComponent(
       "Here’s my Street Fighter 6 tier list 🔥 #SF6"
