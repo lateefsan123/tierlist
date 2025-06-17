@@ -1,0 +1,35 @@
+<!-- public/view.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SF6 Tier List</title>
+
+  <!-- OpenGraph/Twitter Card Meta -->
+  <meta property="og:title" content="Street Fighter 6 Tier List" />
+  <meta property="og:description" content="See how I ranked every SF6 character." />
+  <meta property="og:image" content="" id="og-image" />
+  <meta property="og:type" content="website" />
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Street Fighter 6 Tier List" />
+  <meta name="twitter:description" content="See how I ranked every SF6 character." />
+  <meta name="twitter:image" content="" id="twitter-image" />
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const filename = params.get('id');
+    const imageUrl = `${location.origin}/snapshots/${filename}`;
+    document.getElementById("og-image").setAttribute("content", imageUrl);
+    document.getElementById("twitter-image").setAttribute("content", imageUrl);
+  </script>
+</head>
+<body>
+  <h2>Preview:</h2>
+  <img id="preview" style="max-width: 100%;" />
+  <script>
+    document.getElementById("preview").src = `${location.origin}/snapshots/${new URLSearchParams(location.search).get('id')}`;
+  </script>
+</body>
+</html>
