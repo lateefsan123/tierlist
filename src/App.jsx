@@ -165,20 +165,27 @@ function App() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="name" style={{ backgroundColor: tier.color }}>
-              {editingTier === i ? (
-                <input
-                  type="text"
-                  value={editedTierName}
-                  onChange={(e) => setEditedTierName(e.target.value)}
-                  onBlur={() => finishEditing(i)}
-                  onKeyDown={(e) => e.key === "Enter" && finishEditing(i)}
-                  autoFocus
-                />
-              ) : (
-                <span onClick={() => startEditing(i, tier.item)}>{tier.item}</span>
-              )}
-            </div>
+                    <div 
+            className="name" 
+            style={{ backgroundColor: tier.color, cursor: 'pointer' }}
+            onClick={() => startEditing(i, tier.item)}
+          >
+            {editingTier === i ? (
+              <input
+                type="text"
+                value={editedTierName}
+                onChange={(e) => setEditedTierName(e.target.value)}
+                onBlur={() => finishEditing(i)}
+                onKeyDown={(e) => e.key === "Enter" && finishEditing(i)}
+                autoFocus
+                style={{ height: "100%", width: "100%", border: "none", outline: "none" }}
+                onClick={(e) => e.stopPropagation()} // prevents div click when input is clicked
+              />
+            ) : (
+              <span>{tier.item}</span>
+            )}
+          </div>
+
             <div className="middle">
               {(tiers[tier.item] || []).map((charId, idx) => (
                 <motion.div

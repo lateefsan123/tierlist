@@ -101,7 +101,7 @@ body {
   border: 2px solid white;
 }
 
-/* RANK NAME + ACTION BUTTON */
+/* Tier name div and delete BUTTON div */
 .name,
 .right {
   width: 140px;
@@ -195,7 +195,7 @@ body {
 .character25 { background-image: url("images2/terry.jpg"); }
 .character26 { background-image: url("images2/zangief.jpg"); }
 
-/* BUTTONS */
+
 .add-button,
 .end button {
   background-color: #00b8ff;
@@ -222,7 +222,7 @@ body {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* perfect center */
+  transform: translate(-50%, -50%); 
   background-color: white;
   width: 280px;
   border-radius: 10px;
@@ -238,7 +238,7 @@ body {
 }
 
 .showsettings:hover {
-  transform: translate(-50%, -50%) scale(1.01); /* stay centered while scaling */
+  transform: translate(-50%, -50%) scale(1.01);
 }
 
 
