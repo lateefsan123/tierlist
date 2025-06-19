@@ -333,19 +333,29 @@ body {
   background-color: #b91c1c;
 }
 
+
+
 .changechar {
   position: fixed;
   top: 20px;
   right: 20px;
   padding: 6px 12px;
-  background-color: #444;
+  background-color: #374151; 
   border: none;
-  border-radius: 6px;
+  padding: 8px 12px;
   color: white;
-  cursor: pointer;
+  border-radius: 6px;
   font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  transition: all 0.2s ease;
 }
 
+.changechar:hover {
+  background-color: #4b5563; 
+  transform: scale(1.05);
+}
 
 
 .name input {

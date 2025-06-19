@@ -3,6 +3,9 @@ import html2canvas from "html2canvas";
 import { motion, AnimatePresence } from "framer-motion";
 
 function App() {
+  const [hoveredCharId, setHoveredCharId] = useState(null);
+  const [dropTarget, setDropTarget] = useState({ tier: null, charId: null });
+
   const [editingTier, setEditingTier] = useState(null);
   const [editedTierName, setEditedTierName] = useState("");
   const [row, setRow] = useState([
@@ -22,11 +25,8 @@ function App() {
   const settingsRef = useRef(null);
   const [draggedChar, setDraggedChar] = useState(null);
 
-  // Share tier list via Twittee couldnt get it to work
   async function handleTwitter() {
-    const tweetText = encodeURIComponent(
-      "Here’s my Street Fighter 6 tier list 🔥 #SF6"
-    );
+    const tweetText = encodeURIComponent("Here’s my Street Fighter 6 tier list 🔥 #SF6");
     const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}`;
     window.open(tweetUrl, "_blank");
   }
@@ -66,11 +66,7 @@ function App() {
 
   useEffect(() => {
     function handleClickOutside(e) {
-      if (
-        settings &&
-        settingsRef.current &&
-        !settingsRef.current.contains(e.target)
-      ) {
+      if (settings && settingsRef.current && !settingsRef.current.contains(e.target)) {
         Setsettings(false);
       }
     }
@@ -82,39 +78,33 @@ function App() {
     setDraggedChar(charId);
   }
 
-  function handleDrop(e, tierLabel) {
+  function handleDropToTier(e, tierLabel) {
     e.preventDefault();
-    const charId = draggedChar;
-    if (!charId || tiers[tierLabel]?.includes(charId)) return;
+    if (!draggedChar) return;
+
     setTiers((prev) => {
       const updated = { ...prev };
+
       Object.keys(updated).forEach((tier) => {
-        updated[tier] = updated[tier].filter((id) => id !== charId);
+        updated[tier] = updated[tier].filter((id) => id !== draggedChar);
       });
-      updated[tierLabel] = [...(updated[tierLabel] || []), charId];
+
+      const currentTier = [...(updated[tierLabel] || [])];
+      const index = dropTarget.charId ? currentTier.indexOf(dropTarget.charId) : -1;
+
+      if (index !== -1) {
+        currentTier.splice(index, 0, draggedChar);
+      } else {
+        currentTier.push(draggedChar);
+      }
+
+      updated[tierLabel] = currentTier;
       return updated;
     });
-    setUnranked((prev) => prev.filter((id) => id !== charId));
-    setDraggedChar(null);
-  }
 
-  function handleDropInTier(e, tierLabel, targetCharId) {
-    e.preventDefault();
-    if (!draggedChar || draggedChar === targetCharId) return;
-    setTiers((prev) => {
-      const updatedTier = [...prev[tierLabel]];
-      const fromIndex = updatedTier.indexOf(draggedChar);
-      const toIndex = updatedTier.indexOf(targetCharId);
-      if (fromIndex > -1 && toIndex > -1) {
-        updatedTier.splice(fromIndex, 1);
-        updatedTier.splice(toIndex, 0, draggedChar);
-      }
-      return {
-        ...prev,
-        [tierLabel]: updatedTier,
-      };
-    });
+    setUnranked((prev) => prev.filter((id) => id !== draggedChar));
     setDraggedChar(null);
+    setDropTarget({ tier: null, charId: null });
   }
 
   function allowDrop(e) {
@@ -144,14 +134,10 @@ function App() {
   return (
     <div className="body">
       <div className="header">
-        <button className="add-button" onClick={() => Setsettings(true)}>
-          + Add Tier
-        </button>
-        <button className="snapshot-button" onClick={handleSnapshot}>
-          <i className="fa-solid fa-camera"></i>
-        </button>
-        <button className="twitter-button" onClick={handleTwitter}>Post to 
-          <i className="fa-brands fa-x-twitter" style={{ color: "black" }}></i>
+        <button className="add-button" onClick={() => Setsettings(true)}>+ Add Tier</button>
+        <button className="snapshot-button" onClick={handleSnapshot}><i className="fa-solid fa-camera"></i></button>
+        <button className="twitter-button" onClick={handleTwitter}>
+          Post to <i className="fa-brands fa-x-twitter" style={{ color: "black" }}></i>
         </button>
       </div>
       <div className="maincontent">
@@ -159,33 +145,29 @@ function App() {
           <motion.div
             key={i}
             className="item"
-            onDrop={(e) => handleDrop(e, tier.item)}
-            onDragOver={allowDrop}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
+            onDrop={(e) => handleDropToTier(e, tier.item)}
+            onDragOver={(e) => {
+              e.preventDefault();
+              if (tiers[tier.item].length === 0) {
+                setDropTarget({ tier: tier.item, charId: null });
+              }
+            }}
           >
-                    <div 
-            className="name" 
-            style={{ backgroundColor: tier.color, cursor: 'pointer' }}
-            onClick={() => startEditing(i, tier.item)}
-          >
-            {editingTier === i ? (
-              <input
-                type="text"
-                value={editedTierName}
-                onChange={(e) => setEditedTierName(e.target.value)}
-                onBlur={() => finishEditing(i)}
-                onKeyDown={(e) => e.key === "Enter" && finishEditing(i)}
-                autoFocus
-                style={{ height: "100%", width: "100%", border: "none", outline: "none" }}
-                onClick={(e) => e.stopPropagation()} // prevents div click when input is clicked
-              />
-            ) : (
-              <span>{tier.item}</span>
-            )}
-          </div>
-
+            <div className="name" style={{ backgroundColor: tier.color, cursor: "pointer" }} onClick={() => startEditing(i, tier.item)}>
+              {editingTier === i ? (
+                <input
+                  type="text"
+                  value={editedTierName}
+                  onChange={(e) => setEditedTierName(e.target.value)}
+                  onBlur={() => finishEditing(i)}
+                  onKeyDown={(e) => e.key === "Enter" && finishEditing(i)}
+                  autoFocus
+                  style={{ height: "100%", width: "100%", border: "none", outline: "none" }}
+                />
+              ) : (
+                <span>{tier.item}</span>
+              )}
+            </div>
             <div className="middle">
               {(tiers[tier.item] || []).map((charId, idx) => (
                 <motion.div
@@ -193,8 +175,11 @@ function App() {
                   className={`char ${charId}`}
                   draggable
                   onDragStart={(e) => handleDragStart(e, charId)}
-                  onDragOver={(e) => e.preventDefault()}
-                  onDrop={(e) => handleDropInTier(e, tier.item, charId)}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    setDropTarget({ tier: tier.item, charId });
+                  }}
+                  onDrop={(e) => handleDropToTier(e, tier.item)}
                   whileDrag={{ scale: 1.2, zIndex: 999 }}
                 />
               ))}
@@ -250,10 +235,7 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
-      <button
-        className="to-top"
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      >
+      <button className="to-top" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
         <i className="fa-duotone fa-solid fa-arrow-up"></i>
       </button>
       <a href="https://fightercenter.net/">
