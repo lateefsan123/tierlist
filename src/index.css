@@ -94,7 +94,7 @@ body {
   flex-wrap: wrap;
   flex-direction: row;
   background-color: lightgrey;
-  padding: 5px;
+  padding: 4px;
   min-height: 80px;
   flex: 1;
   gap: 5px;
